@@ -37,6 +37,7 @@ export class BusinessData {
           })
         })
       }
+     
 
   getBusinesses(page: number){
     let pageStart = (page - 1) * this.pageSize; //let - partially global and local, var - for local variables.
@@ -86,4 +87,18 @@ getCurrentWeather(lat: number, lon: number): Observable<any> {
     else if (temp <= 25) return "#ff7f00"; // Orange
     else return "#ff0000";                 // Red
   }
+  // ------------------ FE14: Post Review ------------------
+postReview(id: any, review: any) { 
+  let newReview = { 
+    username: review.username, 
+    review: review.comment, 
+    star: review.stars 
+  }; 
+
+  jsonData.forEach(function(business) { 
+    if (business._id.$oid == id) { 
+      business['reviews'].push(newReview); 
+    } 
+  }); 
+}
 }

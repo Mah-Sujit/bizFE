@@ -90,5 +90,8 @@ export class Business {
   
     });
 }
-onSubmit() { console.log(this.reviewForm.value); }
+onSubmit() { this.businessData.postReview( 
+  this.route.snapshot.paramMap.get('id'), 
+  this.reviewForm.value); 
+  this.reviewForm.reset(); }
 }
