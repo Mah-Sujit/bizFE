@@ -3,10 +3,12 @@ import { ActivatedRoute,} from '@angular/router';
 import { BusinessData } from '../../services/business-data';
 import { CommonModule } from '@angular/common';
 import {GoogleMapsModule} from '@angular/google-maps';
+import { ReactiveFormsModule } from '@angular/forms';
+import { FormBuilder,Validators } from '@angular/forms';
 
 @Component({
   selector: 'app-business',
-  imports: [CommonModule,GoogleMapsModule],
+  imports: [CommonModule,GoogleMapsModule,ReactiveFormsModule],
   providers: [BusinessData],
   templateUrl: './business.html',
   styleUrl: './business.css',
@@ -23,12 +25,36 @@ export class Business {
   weatherIcon: any;
   weatherIconURL: any;
   temperatureColour: any;
+  reviewForm: any;
 
-  constructor (private businessData: BusinessData, private route: ActivatedRoute) {} 
+  constructor (private businessData: BusinessData, private route: ActivatedRoute, private formBuilder: FormBuilder) {} 
+
+  isInvalid(control:any) { 
+      return this.reviewForm.controls[control].invalid && 
+      this.reviewForm.controls[control].touched; 
+    }
+    isUntouched() {
+      return this.reviewForm.controls.username.pristine || 
+             this.reviewForm.controls.comment.pristine;
+            }
+
+    isIncomplete() {
+      return this.isInvalid('username') ||
+             this.isInvalid('comment') || 
+             this.isUntouched();
+            }
+
   
   ngOnInit() {
+    this.reviewForm = this.formBuilder.group( {
+      username: ['',Validators.required],
+      comment: ['',Validators.required],
+      stars: 5
+    });
+
      this.business_list = this.businessData.getBusiness(
        this.route.snapshot.paramMap.get('id'));
+     console.log(this.business_list[0]['reviews'])  
     
     this.business_lat = this.business_list[0].location.coordinates[0]; 
     this.business_lng = this.business_list[0].location.coordinates[1];
@@ -64,5 +90,5 @@ export class Business {
   
     });
 }
-
+onSubmit() { console.log(this.reviewForm.value); }
 }

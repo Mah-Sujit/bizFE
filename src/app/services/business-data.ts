@@ -12,6 +12,32 @@ export class BusinessData {
 
   constructor( private http: HttpClient) { }
 
+    populateReviews() {
+      let loremIpsum: string = "";
+      let dummyReview: any = {};
+      
+      this.getLoremIpsum(1).subscribe( (response: any) => {
+        loremIpsum = response.text;
+        jsonData.forEach( function(business){
+          let numReviews = Math.floor(Math.random() * 10);
+          for (var i = 0; i < numReviews; i++) {
+            let textSize = Math.floor(Math.random() * 290 + 10);
+            let textStart = Math.floor(Math.random() * (loremIpsum.length - textSize));
+
+            
+            dummyReview = {
+              'username' : 'User ' + Math.floor(Math.random() * 9999 + 1),
+              
+              'comment' : loremIpsum.slice(textStart, textStart + textSize),
+              
+              'stars' : Math.floor( Math.random() * 5 + 1 )
+            };
+            business['reviews']. push(dummyReview);
+          }
+          })
+        })
+      }
+
   getBusinesses(page: number){
     let pageStart = (page - 1) * this.pageSize; //let - partially global and local, var - for local variables.
     let pageEnd = pageStart + this.pageSize;
