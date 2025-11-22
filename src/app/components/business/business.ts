@@ -5,6 +5,7 @@ import { CommonModule } from '@angular/common';
 import {GoogleMapsModule} from '@angular/google-maps';
 import { ReactiveFormsModule } from '@angular/forms';
 import { FormBuilder,Validators } from '@angular/forms';
+import { AuthService } from '@auth0/auth0-angular';
 
 @Component({
   selector: 'app-business',
@@ -27,7 +28,10 @@ export class Business {
   temperatureColour: any;
   reviewForm: any;
 
-  constructor (private businessData: BusinessData, private route: ActivatedRoute, private formBuilder: FormBuilder) {} 
+  constructor (private businessData: BusinessData, 
+    private route: ActivatedRoute, 
+    private formBuilder: FormBuilder,
+    protected authService: AuthService ) {} 
 
   isInvalid(control:any) { 
       return this.reviewForm.controls[control].invalid && 
